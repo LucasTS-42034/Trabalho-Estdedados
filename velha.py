@@ -95,3 +95,74 @@ while True:
         print("Modo PVE")
     else:
         print("Opção inválida!")
+        
+#----------------------------------------------
+
+tabuleiro = [" " for _ in range(9)]
+
+def mostrar_tabuleiro():
+    print(f"""
+ {tabuleiro[0]} | {tabuleiro[1]} | {tabuleiro[2]}
+-----------
+ {tabuleiro[3]} | {tabuleiro[4]} | {tabuleiro[5]}
+-----------
+ {tabuleiro[6]} | {tabuleiro[7]} | {tabuleiro[8]}
+""")
+
+def verificar_vencedor(jogador):
+    combinacoes = [
+        [0,1,2],[3,4,5],[6,7,8],  # linhas
+        [0,3,6],[1,4,7],[2,5,8],  # colunas
+        [0,4,8],[2,4,6]           # diagonais
+    ]
+    for c in combinacoes:
+        if tabuleiro[c[0]] == tabuleiro[c[1]] == tabuleiro[c[2]] == jogador:
+            return True
+    return False
+
+def jogadas_disponiveis():
+    return [i for i in range(9) if tabuleiro[i] == " "]
+
+import random
+
+def jogada_maquina():
+    pos = random.choice(jogadas_disponiveis())
+    tabuleiro[pos] = "O"
+
+def jogo():
+    while True:
+        mostrar_tabuleiro()
+        
+        # Jogador
+        jogada = int(input("Escolha uma posição (0 a 8): "))
+        if tabuleiro[jogada] != " ":
+            print("Posição ocupada!")
+            continue
+        
+        tabuleiro[jogada] = "X"
+        
+        if verificar_vencedor("X"):
+            mostrar_tabuleiro()
+            print("Você venceu!")
+            break
+        
+        if not jogadas_disponiveis():
+            mostrar_tabuleiro()
+            print("Empate!")
+            break
+        
+        # Máquina
+        jogada_maquina()
+        
+        if verificar_vencedor("O"):
+            mostrar_tabuleiro()
+            print("A máquina venceu!")
+            break
+        
+        if not jogadas_disponiveis():
+            mostrar_tabuleiro()
+            print("Empate!")
+            break
+
+# Iniciar jogo
+jogo()
